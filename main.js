@@ -38,10 +38,74 @@ var main = function(){
   var canvas = document.getElementById('myCanvas');
   var context = canvas.getContext('2d');
 
-  context.beginPath();
-  context.moveTo(100, 150);
-  context.lineTo(450, 50);
-  context.stroke();
+  var width = window.innerWidth
+  || document.documentElement.clientWidth
+  || document.body.clientWidth;
+
+  var height = window.innerHeight
+  || document.documentElement.clientHeight
+  || document.body.clientHeight;
+
+
+  canvas.width  = width;
+  canvas.height = height;
+
+  var x = width/2;
+  var y = height/2;
+
+
+  console.log("middle x:", x);
+  console.log("middle y:", y);
+
+  var z = 100;
+  var length = (z/2)+y;
+
+  (function() {
+  			var
+  				// Obtain a reference to the canvas element
+  				// using its id.
+  				htmlCanvas = document.getElementById('myCanvas'),
+
+  			  	// Obtain a graphics context on the
+  			  	// canvas element for drawing.
+  			  	context = htmlCanvas.getContext('2d');
+
+  			// Start listening to resize events and
+  			// draw canvas.
+  			initialize();
+
+  			function initialize() {
+  				// Register an event listener to
+  				// call the resizeCanvas() function each time
+  				// the window is resized.
+  				window.addEventListener('resize', resizeCanvas, false);
+
+  				// Draw canvas border for the first time.
+  				resizeCanvas();
+  			}
+
+  			// Display custom canvas.
+  			// In this case it's a blue, 5 pixel border that
+  			// resizes along with the browser window.
+  			function redraw() {
+          context.beginPath();
+          context.moveTo(x, length-z);
+          context.lineTo(x, length) ;
+          context.stroke();
+  			}
+
+  			// Runs each time the DOM window resize event fires.
+  			// Resets the canvas dimensions to match window,
+  			// then draws the new borders accordingly.
+  			function resizeCanvas() {
+  				htmlCanvas.width = window.innerWidth;
+  				htmlCanvas.height = window.innerHeight;
+  				redraw();
+  			}
+
+  		})();
+
+
 };
 
 ready(main);
