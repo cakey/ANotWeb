@@ -14,6 +14,7 @@
 //Make triangles, same
 
 
+my_interface = (function() {
 var ready = function ( fn ) {
 
     // Sanity check
@@ -38,37 +39,60 @@ var main = function(){
   var canvas = document.getElementById('myCanvas');
   var context = canvas.getContext('2d');
 
-  var width = window.innerWidth
-  || document.documentElement.clientWidth
-  || document.body.clientWidth;
+    var htmlCanvas = document.getElementById('myCanvas'),
+        context = htmlCanvas.getContext('2d');
 
-  var height = window.innerHeight
-  || document.documentElement.clientHeight
-  || document.body.clientHeight;
+    initialize();
+    function initialize() {
+      window.addEventListener('resize', resizeCanvas, false);
+      resizeCanvas();
+    }
+
+    function redraw() {
+      var width = window.innerWidth
+        || document.documentElement.clientWidth
+        || document.body.clientWidth;
+
+      var height = window.innerHeight
+        || document.documentElement.clientHeight
+        || document.body.clientHeight;
+
+      canvas.width  = width;
+      canvas.height = height;
+
+      var x = width/2;
+      var y = height/2;
+
+      console.log("middle x:", x);
+      console.log("middle y:", y);
+
+      var z = 100;
+      var length = (z/2)+y;
+
+      context.beginPath();
+      context.moveTo(x, length-z);
+      context.lineTo(x, length) ;
+      context.stroke();
 
 
-  canvas.width  = width;
-  canvas.height = height;
+    }
 
-  var x = width/2;
-  var y = height/2;
+    // Runs each time the DOM window resize event fires.
+    // Resets the canvas dimensions to match window,
+    // then draws the new borders accordingly.
+    function resizeCanvas() {
+      htmlCanvas.width = window.innerWidth;
+      htmlCanvas.height = window.innerHeight;
+      redraw();
+    }
 
-  console.log("middle x:", x);
-  console.log("middle y:", y);
 
-  var z = 100;
-  var length = (z/2)+y;
-
-  context.beginPath();
-  context.moveTo(x, length-z);
-  context.lineTo(x, length) ;
-  context.stroke();
-
-  context.beginPath();
-  context.moveTo(600, 100); //how much from the left and top, setur nidur punkt thar
-  context.lineTo(600, 700); //milli hvada punkta linan er teiknud, sidan fra theim punkti og nidur ad punktinum sem verdur teiknad ad
-  context.stroke(); //stroke er thad sem synir linu
 
 };
-
 ready(main);
+
+return {
+  hello: function(){console.log("hello world");}
+}
+
+})();
