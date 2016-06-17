@@ -34,7 +34,7 @@ var ready = function ( fn ) {
 };
 
 var main = function(){
-  console.log("running main");
+  console.log("running main"); //skrifar i console
   var canvas = document.getElementById('myCanvas');
   var context = canvas.getContext('2d');
 
@@ -53,58 +53,21 @@ var main = function(){
   var x = width/2;
   var y = height/2;
 
-
   console.log("middle x:", x);
   console.log("middle y:", y);
 
   var z = 100;
   var length = (z/2)+y;
 
-  (function() {
-  			var
-  				// Obtain a reference to the canvas element
-  				// using its id.
-  				htmlCanvas = document.getElementById('myCanvas'),
+  context.beginPath();
+  context.moveTo(x, length-z);
+  context.lineTo(x, length) ;
+  context.stroke();
 
-  			  	// Obtain a graphics context on the
-  			  	// canvas element for drawing.
-  			  	context = htmlCanvas.getContext('2d');
-
-  			// Start listening to resize events and
-  			// draw canvas.
-  			initialize();
-
-  			function initialize() {
-  				// Register an event listener to
-  				// call the resizeCanvas() function each time
-  				// the window is resized.
-  				window.addEventListener('resize', resizeCanvas, false);
-
-  				// Draw canvas border for the first time.
-  				resizeCanvas();
-  			}
-
-  			// Display custom canvas.
-  			// In this case it's a blue, 5 pixel border that
-  			// resizes along with the browser window.
-  			function redraw() {
-          context.beginPath();
-          context.moveTo(x, length-z);
-          context.lineTo(x, length) ;
-          context.stroke();
-  			}
-
-  			// Runs each time the DOM window resize event fires.
-  			// Resets the canvas dimensions to match window,
-  			// then draws the new borders accordingly.
-  			function resizeCanvas() {
-  				htmlCanvas.width = window.innerWidth;
-  				htmlCanvas.height = window.innerHeight;
-  				redraw();
-  			}
-
-  		})();
-
+  context.beginPath();
+  context.moveTo(600, 100); //how much from the left and top, setur nidur punkt thar
+  context.lineTo(600, 700); //milli hvada punkta linan er teiknud, sidan fra theim punkti og nidur ad punktinum sem verdur teiknad ad
+  context.stroke(); //stroke er thad sem synir linu
 
 };
 
