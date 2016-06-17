@@ -39,9 +39,6 @@ var main = function(){
   var canvas = document.getElementById('myCanvas');
   var context = canvas.getContext('2d');
 
-    var htmlCanvas = document.getElementById('myCanvas'),
-        context = htmlCanvas.getContext('2d');
-
     initialize();
     function initialize() {
       window.addEventListener('resize', resizeCanvas, false);
@@ -49,16 +46,9 @@ var main = function(){
     }
 
     function redraw() {
-      var width = window.innerWidth
-        || document.documentElement.clientWidth
-        || document.body.clientWidth;
 
-      var height = window.innerHeight
-        || document.documentElement.clientHeight
-        || document.body.clientHeight;
-
-      canvas.width  = width;
-      canvas.height = height;
+      width = canvas.width;
+      height = canvas.height;
 
       var x = width/2;
       var y = height/2;
@@ -81,8 +71,8 @@ var main = function(){
     // Resets the canvas dimensions to match window,
     // then draws the new borders accordingly.
     function resizeCanvas() {
-      htmlCanvas.width = window.innerWidth;
-      htmlCanvas.height = window.innerHeight;
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
       redraw();
     }
 
