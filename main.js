@@ -44,6 +44,10 @@ my_interface = (function() {
                 [0.5, 0.4, 0.5, 0.6], ///essi lina a ad hverfa
                 [0.5, 0.4, 0.5, 0.6],
                 [0.5, 0.4, 0.5, 0.6],
+                [0, 0, 0, 0],
+                [0, 0, 0, 0],
+                [0, 0, 0, 0],
+                [0, 0, 0, 0],
             ]
         }
         var needsRedraw = true;
@@ -64,13 +68,41 @@ my_interface = (function() {
 
             var evenSecond = sinceStart % 2000 < 1000;
             needsRedraw = false;
-            if (sinceStart < 5000) {
-              prop = (sinceStart / 5000)
-              state.lines[1][0] = 0.5 - (0.5*prop)
-              state.lines[1][2] = 0.5 - (0.5*prop)
-              state.lines[2][0] = 0.5 + (0.5*prop)
-              state.lines[2][2] = 0.5 + (0.5*prop)
-              needsRedraw = true;
+            var waitTime = 50;
+            if (sinceStart < 5000 + waitTime && sinceStart > waitTime) {
+                var prop = ((sinceStart - waitTime) / 5000)
+                    //change x
+                state.lines[1][0] = 0.5 - (0.15 * prop)
+                state.lines[1][2] = 0.5 - (0.15 * prop)
+                state.lines[2][0] = 0.5 + (0.15 * prop)
+                state.lines[2][2] = 0.5 + (0.15 * prop)
+
+                //change y
+                state.lines[1][1] = 0.4 - (0.15 * prop)
+                state.lines[1][3] = 0.6 + (0.15 * prop)
+                state.lines[2][1] = 0.4 - (0.15 * prop)
+                state.lines[2][3] = 0.6 + (0.15 * prop)
+                needsRedraw = true;
+            }
+            if (sinceStart > 5000 + waitTime && state.lines[3][0] == 0) {
+                state.lines[3] = [0.3, 0.2, 0.4, 0.2]
+                state.lines[4] = [0.6, 0.2, 0.7, 0.2]
+                state.lines[5] = [0.3, 0.8, 0.4, 0.8]
+                state.lines[6] = [0.6, 0.8, 0.7, 0.8]
+                needsRedraw = true;
+            }
+            if (sinceStart > 5000 + waitTime && state.lines[3][0] != 0 && sinceStart < 6000 + waitTime) {
+                var prop = ((sinceStart - waitTime - 5000) / 1000)
+                state.lines[3][0] = 0.35 - (0.05 * prop)
+                state.lines[3][2] = 0.35 + (0.05 * prop)
+                state.lines[4][0] = 0.65 - (0.05 * prop)
+                state.lines[4][2] = 0.65 + (0.05 * prop)
+                state.lines[5][0] = 0.35 - (0.05 * prop)
+                state.lines[5][2] = 0.35 + (0.05 * prop)
+                state.lines[6][0] = 0.65 - (0.05 * prop)
+                state.lines[6][2] = 0.65 + (0.05 * prop)
+
+                needsRedraw = true;
             }
 
             lastTime = currentTime
@@ -105,6 +137,7 @@ my_interface = (function() {
         function resizeCanvas() {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
+            needsRedraw = true;
             redraw();
         }
 
