@@ -129,10 +129,31 @@ Anim = (function() {
         return this.totDuration;
     };
 
+    var RepeatAnim = function(animation, repeats, duration, remain) {
+        this.animation = animation;
+        this.repeats = repeats;
+        this.remain = remain;
+    };
+    RepeatAnim.prototype.get = function(duration) {
+        var actualDur = this.animation.duration()
+        if (duration/actualDur > this.repeats) {
+            return this.animation.get(duration-(actualDur*(this.repeats-1)));
+        } else {
+            return this.animation.get(duration % actualDur);
+        }
+    };
+    RepeatAnim.prototype.done = function(duration) {
+        return duration > this.duration();
+    };
+    RepeatAnim.prototype.duration = function() {
+        return this.animation.duration()*this.repeats;
+    };
+
     return  {
       Line: LineAnim,
       Simul: SimulAnim,
       Consec: ConsecAnim,
-      Wait: WaitAnim
+      Wait: WaitAnim,
+      Repeat:RepeatAnim
     }
 })()
