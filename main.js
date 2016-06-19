@@ -140,6 +140,7 @@ my_interface = (function() {
         });
         return d;
     }
+
     var WaitAnim = function(duration){
         this.totDuration = duration;
     };
@@ -198,8 +199,15 @@ my_interface = (function() {
         null,
         true
     )
-    var root = new ConsecAnim([(new WaitAnim(500)), centExpandAnim, covExpandAnim], null, true)
+    var main = new ConsecAnim([
+      (new WaitAnim(5000)),
+      centExpandAnim,
+      covExpandAnim
+    ], null, true)
 
+    var root = new SimulAnim(
+      [main, new LineAnim([0.5,0.4, 0.5, 0.6], [0.5,0.4, 0.5, 0.6], 1000, true)]
+    )
     var main = function() {
         console.log("running main"); //skrifar i console
         var canvas = document.getElementById('myCanvas');
