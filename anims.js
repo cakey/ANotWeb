@@ -6,6 +6,13 @@ Anim = (function() {
         return state1;
     }
 
+    var doneFunc = function(duration) {
+        if (typeof duration === 'undefined'){
+            throw new Error("duration not defined")
+        }
+        return duration > this.duration();
+    };
+
     var LineAnim = function(start, end, duration, remain) {
         //start and end are [x1%, y1%, x2%, y2%]
         // duration is how long we transition from start to end
@@ -40,9 +47,7 @@ Anim = (function() {
             }
         }
     }
-    LineAnim.prototype.done = function(duration) {
-        return duration > this.totDuration;
-    }
+    LineAnim.prototype.done = doneFunc;
     LineAnim.prototype.duration = function() {
         return this.totDuration;
     }
@@ -56,21 +61,16 @@ Anim = (function() {
             lines: []
         };
         this.animations.forEach(function(anim) {
-            var stateToAdd = anim.get(duration);
-            stateToAdd.lines.forEach(function(line) {
-                state.lines.push(line);
-            });
+            if (!anim.done(duration) || anim.remain) {
+                var stateToAdd = anim.get(duration);
+                stateToAdd.lines.forEach(function(line) {
+                    state.lines.push(line);
+                });
+            }
         });
         return state;
     }
-    SimulAnim.prototype.done = function(duration) {
-        this.animations.forEach(function(anim) {
-            if (!anim.done(duration)) {
-                return false;
-            }
-        })
-        return true;
-    }
+    SimulAnim.prototype.done = doneFunc
     SimulAnim.prototype.duration = function() {
         var d = 0;
         this.animations.forEach(function(anim) {
@@ -79,9 +79,10 @@ Anim = (function() {
         return d;
     }
 
-    var ConsecAnim = function(animations) {
+    var ConsecAnim = function(animations, duration, remain) {
         this.animations = animations;
         this.lastStart = 0;
+        this.remain = remain;
     };
     ConsecAnim.prototype.get = function(duration) {
         var currState = {
@@ -103,9 +104,7 @@ Anim = (function() {
         }
         return currState;
     }
-    ConsecAnim.prototype.done = function(duration) {
-        return duration > this.duration();
-    }
+    ConsecAnim.prototype.done = doneFunc;
     ConsecAnim.prototype.duration = function() {
         var d = 0;
         this.animations.forEach(function(anim) {
@@ -122,9 +121,7 @@ Anim = (function() {
             lines: []
         };
     };
-    WaitAnim.prototype.done = function(duration) {
-        return duration > this.duration();
-    };
+    WaitAnim.prototype.done = doneFunc;
     WaitAnim.prototype.duration = function() {
         return this.totDuration;
     };
@@ -142,9 +139,7 @@ Anim = (function() {
             return this.animation.get(duration % actualDur);
         }
     };
-    RepeatAnim.prototype.done = function(duration) {
-        return duration > this.duration();
-    };
+    RepeatAnim.prototype.done = doneFunc;
     RepeatAnim.prototype.duration = function() {
         return this.animation.duration()*this.repeats;
     };
@@ -156,9 +151,7 @@ Anim = (function() {
     ReverseAnim.prototype.get = function(duration) {
         return this.animation.get(Math.max(0, this.duration()-duration))
     };
-    ReverseAnim.prototype.done = function(duration) {
-        return duration > this.duration();
-    };
+    ReverseAnim.prototype.done = doneFunc;
     ReverseAnim.prototype.duration = function() {
         return this.animation.duration();
     };

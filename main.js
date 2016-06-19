@@ -77,7 +77,7 @@ my_interface = (function() {
     var main = new Anim.Consec([
         (new Anim.Wait(5000)),
         centExpandAnim,
-        new Anim.Repeat(covExpandAnim, 5, null, true),
+        covExpandAnim,
     ], null, true)
 
     var root = new Anim.Simul(
