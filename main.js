@@ -83,6 +83,7 @@ my_interface = (function() {
     var root = new Anim.Simul(
         [main, new Anim.Line([0.5, 0.4, 0.5, 0.6], [0.5, 0.4, 0.5, 0.6], 1000, true)]
     )
+    // root = new Anim.Reverse(root);
     var main = function() {
         console.log("running main"); //skrifar i console
         var canvas = document.getElementById('myCanvas');

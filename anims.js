@@ -149,11 +149,26 @@ Anim = (function() {
         return this.animation.duration()*this.repeats;
     };
 
+    var ReverseAnim = function(animation, duration, remain) {
+        this.animation = animation;
+        this.remain = remain;
+    };
+    ReverseAnim.prototype.get = function(duration) {
+        return this.animation.get(Math.max(0, this.duration()-duration))
+    };
+    ReverseAnim.prototype.done = function(duration) {
+        return duration > this.duration();
+    };
+    ReverseAnim.prototype.duration = function() {
+        return this.animation.duration();
+    };
+
     return  {
       Line: LineAnim,
       Simul: SimulAnim,
       Consec: ConsecAnim,
       Wait: WaitAnim,
-      Repeat:RepeatAnim
+      Repeat: RepeatAnim,
+      Reverse: ReverseAnim,
     }
 })()
