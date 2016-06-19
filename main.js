@@ -108,6 +108,7 @@ my_interface = (function() {
     var root = new Anim.Simul(
         [main, new Anim.Line([0.5, 0.4, 0.5, 0.6], [0.5, 0.4, 0.5, 0.6], 1000, true)]
     )
+    root = new Anim.Speed(root, 1);
 
     var main = function() {
         console.log("running main"); //skrifar i console

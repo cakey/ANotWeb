@@ -168,6 +168,22 @@ Anim = (function() {
         return 0;
     };
 
+    var SpeedTransform = function(animation, speed, remain) {
+        if (speed <= 0){
+            throw new Error("speed modifier must be >= 0")
+        }
+        this.animation = animation;
+        this.speed = speed;
+        this.remain = remain;
+    }
+    SpeedTransform.prototype.get = function(duration) {
+        return this.animation.get(duration*this.speed);
+    };
+    SpeedTransform.prototype.done = doneFunc;
+    SpeedTransform.prototype.duration = function() {
+        return this.animation/this.speed;
+    };
+
     return  {
       Line: LineAnim,
       Simul: SimulAnim,
@@ -176,5 +192,6 @@ Anim = (function() {
       Repeat: RepeatAnim,
       Reverse: ReverseAnim,
       Final: FinalAnim,
+      Speed: SpeedTransform,
     }
 })()
