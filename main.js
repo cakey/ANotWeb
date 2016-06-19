@@ -219,7 +219,7 @@ my_interface = (function() {
         var lastState = {
             lines: []
         }
-
+        var skip = 5000;
         var startTime = new Date();
 
         function initialize() {
@@ -231,7 +231,7 @@ my_interface = (function() {
 
         function update() {
             var currentTime = new Date();
-            var sinceStart = currentTime - startTime;
+            var sinceStart = currentTime - startTime + skip;
 
             state = root.get(sinceStart);
 
