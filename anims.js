@@ -156,6 +156,18 @@ Anim = (function() {
         return this.animation.duration();
     };
 
+    var FinalAnim = function(animation, duration, remain) {
+        this.animation = animation;
+        this.remain = remain;
+    }
+    FinalAnim.prototype.get = function(){
+        return this.animation.get(this.animation.duration());
+    }
+    FinalAnim.prototype.done = doneFunc;
+    FinalAnim.prototype.duration = function() {
+        return 0;
+    };
+
     return  {
       Line: LineAnim,
       Simul: SimulAnim,
@@ -163,5 +175,6 @@ Anim = (function() {
       Wait: WaitAnim,
       Repeat: RepeatAnim,
       Reverse: ReverseAnim,
+      Final: FinalAnim,
     }
 })()

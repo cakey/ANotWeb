@@ -34,39 +34,46 @@ my_interface = (function() {
 
     };
 
+    var leftXMid = 0.35;
+    var leftXExpandFinal = [leftXMid, 0.4 - 0.15, leftXMid, 0.6 + 0.15];
+    var topHorBord = 0.05;
+    var botHorBord = 0.95;
+
+
+    var rightExpandLine = new Anim.Line(
+        [0.5, 0.4, 0.5, 0.6], [0.5 + 0.15, 0.4 - 0.15, 0.5 + 0.15, 0.6 + 0.15],
+        5000,
+        true
+    );
     var centExpandAnim = new Anim.Simul(
         [new Anim.Line(
-                [0.5, 0.4, 0.5, 0.6], [0.5 - 0.15, 0.4 - 0.15, 0.5 - 0.15, 0.6 + 0.15],
+                [0.5, 0.4, 0.5, 0.6], leftXExpandFinal,
                 5000,
                 true
             ),
-            new Anim.Line(
-                [0.5, 0.4, 0.5, 0.6], [0.5 + 0.15, 0.4 - 0.15, 0.5 + 0.15, 0.6 + 0.15],
-                5000,
-                true
-            )
+            rightExpandLine
         ],
         null,
         true
     )
     var covExpandAnim = new Anim.Simul(
         [new Anim.Line(
-                [0.35, 0.15, 0.35, 0.15], [0.35 - 0.03, 0.15, 0.35 + 0.03, 0.15],
+                [leftXMid, topHorBord, leftXMid, topHorBord], [leftXMid - 0.03, topHorBord, leftXMid + 0.03, topHorBord],
                 1000,
                 true
             ),
             new Anim.Line(
-                [0.65, 0.15, 0.65, 0.15], [0.65 - 0.03, 0.15, 0.65 + 0.03, 0.15],
+                [0.65, topHorBord, 0.65, topHorBord], [0.65 - 0.03, topHorBord, 0.65 + 0.03, topHorBord],
                 1000,
                 true
             ),
             new Anim.Line(
-                [0.35, 0.85, 0.35, 0.85], [0.35 - 0.03, 0.85, 0.35 + 0.03, 0.85],
+                [leftXMid, botHorBord, leftXMid, botHorBord], [leftXMid - 0.03, botHorBord, leftXMid + 0.03, botHorBord],
                 1000,
                 true
             ),
             new Anim.Line(
-                [0.65, 0.85, 0.65, 0.85], [0.65 - 0.03, 0.85, 0.65 + 0.03, 0.85],
+                [0.65, botHorBord, 0.65, botHorBord], [0.65 - 0.03, botHorBord, 0.65 + 0.03, botHorBord],
                 1000,
                 true
             ),
@@ -74,16 +81,34 @@ my_interface = (function() {
         null,
         true
     )
-    var main = new Anim.Consec([
-        (new Anim.Wait(5000)),
+    var outwards = new Anim.Consec([
         centExpandAnim,
         covExpandAnim,
+    ], null, false)
+
+    smallSlideUp = new Anim.Line([leftXMid, botHorBord-0.1, leftXMid, botHorBord], [leftXMid, topHorBord, leftXMid, topHorBord+0.1], 5000, false);
+
+    var slide = new Anim.Simul([
+            new Anim.Final(covExpandAnim, null, true),
+            new Anim.Final(rightExpandLine, null, true),
+            new Anim.Consec([
+                new Anim.Line(leftXExpandFinal, [leftXMid, 0.45, leftXMid, 0.55], 5000, false),
+                new Anim.Line([leftXMid, 0.45, leftXMid, 0.55], [leftXMid, botHorBord-0.1, leftXMid, botHorBord], 2500, false),
+                new Anim.Repeat(new Anim.Consec([ smallSlideUp, new Anim.Reverse(smallSlideUp)]), 10)
+                ], null, true)
+        ], null, true)
+
+
+    var main = new Anim.Consec([
+        new Anim.Wait(5000),
+        outwards,
+        slide,
     ], null, true)
 
     var root = new Anim.Simul(
         [main, new Anim.Line([0.5, 0.4, 0.5, 0.6], [0.5, 0.4, 0.5, 0.6], 1000, true)]
     )
-    // root = new Anim.Reverse(root);
+
     var main = function() {
         console.log("running main"); //skrifar i console
         var canvas = document.getElementById('myCanvas');
