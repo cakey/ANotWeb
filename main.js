@@ -260,12 +260,17 @@ my_interface = (function() {
             width = canvas.width;
             height = canvas.height;
 
-            context.clearRect(0, 0, width, height);
+
+            context.fillStyle = "#444444";
+            context.fillRect(0, 0, width, height);
 
             state.lines.forEach(function(line, i) {
                 context.beginPath();
                 context.moveTo(width * line[0], height * line[1]);
                 context.lineTo(width * line[2], height * line[3]);
+                context.strokeStyle = "#ffffff";
+                context.lineWidth = 4;
+                context.lineCap = "round";
                 context.stroke();
 
             });

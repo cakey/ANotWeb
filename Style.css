@@ -1,7 +1,12 @@
 body {
-  background: white;
   padding: 0px; /* Til ad thad se ekki litill rammi i kring um siduna */
   margin: 0px; /* Nuna naer thetta alveg ut i kant */
 
   overflow: hidden; /*  Disable scrollbars, sometimes scrollbars can be useful */
+}
+
+#myCanvas {
+  position: absolute;
+  left: 0px;
+  top: 0px;
 }
