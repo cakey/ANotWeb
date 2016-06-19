@@ -36,57 +36,52 @@ my_interface = (function() {
 
     var centExpandAnim = new Anim.Simul(
         [new Anim.Line(
-            [0.5, 0.4, 0.5, 0.6],
-            [0.5-0.15, 0.4-0.15, 0.5-0.15, 0.6+0.15],
-            1000,
-            true
-        ),
-        new Anim.Line(
-            [0.5, 0.4, 0.5, 0.6],
-            [0.5+0.15, 0.4-0.15, 0.5+0.15, 0.6+0.15],
-            1000,
-            true
-        )],
+                [0.5, 0.4, 0.5, 0.6], [0.5 - 0.15, 0.4 - 0.15, 0.5 - 0.15, 0.6 + 0.15],
+                1000,
+                true
+            ),
+            new Anim.Line(
+                [0.5, 0.4, 0.5, 0.6], [0.5 + 0.15, 0.4 - 0.15, 0.5 + 0.15, 0.6 + 0.15],
+                1000,
+                true
+            )
+        ],
         null,
         true
     )
     var covExpandAnim = new Anim.Simul(
         [new Anim.Line(
-            [0.35, 0.2, 0.35, 0.2],
-            [0.35-0.05, 0.2, 0.35+0.05, 0.2],
-            1000,
-            true
-        ),
-        new Anim.Line(
-            [0.65, 0.2, 0.65, 0.2],
-            [0.65-0.05, 0.2, 0.65+0.05, 0.2],
-            1000,
-            true
-        ),
-        new Anim.Line(
-            [0.35, 0.8, 0.35, 0.8],
-            [0.35-0.05, 0.8, 0.35+0.05, 0.8],
-            1000,
-            true
-        ),
-        new Anim.Line(
-            [0.65, 0.8, 0.65, 0.8],
-            [0.65-0.05, 0.8, 0.65+0.05, 0.8],
-            1000,
-            true
-        ),
+                [0.35, 0.2, 0.35, 0.2], [0.35 - 0.05, 0.2, 0.35 + 0.05, 0.2],
+                1000,
+                true
+            ),
+            new Anim.Line(
+                [0.65, 0.2, 0.65, 0.2], [0.65 - 0.05, 0.2, 0.65 + 0.05, 0.2],
+                1000,
+                true
+            ),
+            new Anim.Line(
+                [0.35, 0.8, 0.35, 0.8], [0.35 - 0.05, 0.8, 0.35 + 0.05, 0.8],
+                1000,
+                true
+            ),
+            new Anim.Line(
+                [0.65, 0.8, 0.65, 0.8], [0.65 - 0.05, 0.8, 0.65 + 0.05, 0.8],
+                1000,
+                true
+            ),
         ],
         null,
         true
     )
     var main = new Anim.Consec([
-      (new Anim.Wait(5000)),
-      centExpandAnim,
-      covExpandAnim
+        (new Anim.Wait(5000)),
+        centExpandAnim,
+        covExpandAnim
     ], null, true)
 
     var root = new Anim.Simul(
-      [main, new Anim.Line([0.5,0.4, 0.5, 0.6], [0.5,0.4, 0.5, 0.6], 1000, true)]
+        [main, new Anim.Line([0.5, 0.4, 0.5, 0.6], [0.5, 0.4, 0.5, 0.6], 1000, true)]
     )
     var main = function() {
         console.log("running main"); //skrifar i console
@@ -120,17 +115,17 @@ my_interface = (function() {
         function redraw(force) {
 
             var needsRedraw = false
-                if (state.lines.length !== lastState.lines.length) {
-                    needsRedraw = true;
-                } else {
-                    for (var i = 0; i < state.lines.length; i++) {
-                        for (var j = 0; j < 4; j++){
-                            if (state.lines[i][j] !== lastState.lines[i][j]) {
-                                needsRedraw = true;
-                            }
+            if (state.lines.length !== lastState.lines.length) {
+                needsRedraw = true;
+            } else {
+                for (var i = 0; i < state.lines.length; i++) {
+                    for (var j = 0; j < 4; j++) {
+                        if (state.lines[i][j] !== lastState.lines[i][j]) {
+                            needsRedraw = true;
                         }
                     }
                 }
+            }
 
             if (!(needsRedraw || force)) {
                 return
