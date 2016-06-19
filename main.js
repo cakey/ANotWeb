@@ -130,21 +130,40 @@ my_interface = (function() {
         }
         return currState;
     }
+    ConsecAnim.prototype.done = function(duration) {
+        return duration > this.duration();
+    }
+    ConsecAnim.prototype.duration = function() {
+        var d = 0;
+        this.animations.forEach(function(anim){
+            d += anim.duration();
+        });
+        return d;
+    }
     var WaitAnim = function(duration){
-
+        this.totDuration = duration;
+    };
+    WaitAnim.prototype.get = function(){
+        return {lines:[]};
+    };
+    WaitAnim.prototype.done = function(duration){
+        return duration > this.duration();
+    };
+    WaitAnim.prototype.duration = function() {
+        return this.totDuration;
     };
 
     var centExpandAnim = new SimulAnim(
         [new LineAnim(
             [0.5, 0.4, 0.5, 0.6],
             [0.5-0.15, 0.4-0.15, 0.5-0.15, 0.6+0.15],
-            5000,
+            1000,
             true
         ),
         new LineAnim(
             [0.5, 0.4, 0.5, 0.6],
             [0.5+0.15, 0.4-0.15, 0.5+0.15, 0.6+0.15],
-            5000,
+            1000,
             true
         )],
         null,
@@ -179,7 +198,7 @@ my_interface = (function() {
         null,
         true
     )
-    var root = new ConsecAnim([centExpandAnim,covExpandAnim])
+    var root = new ConsecAnim([(new WaitAnim(500)), centExpandAnim, covExpandAnim], null, true)
 
     var main = function() {
         console.log("running main"); //skrifar i console
@@ -192,7 +211,6 @@ my_interface = (function() {
         var lastState = {
             lines: []
         }
-        var needsRedraw = true;
 
         var startTime = new Date();
 
@@ -211,7 +229,7 @@ my_interface = (function() {
 
         }
 
-        function redraw() {
+        function redraw(force) {
 
             var needsRedraw = false
                 if (state.lines.length !== lastState.lines.length) {
@@ -226,7 +244,7 @@ my_interface = (function() {
                     }
                 }
 
-            if (!needsRedraw) {
+            if (!(needsRedraw || force)) {
                 return
             }
             console.log("redraw");
@@ -253,8 +271,7 @@ my_interface = (function() {
         function resizeCanvas() {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
-            needsRedraw = true;
-            redraw();
+            redraw(true);
         }
 
         initialize();
