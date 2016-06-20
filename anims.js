@@ -184,6 +184,36 @@ Anim = (function() {
         return this.animation/this.speed;
     };
 
+    var RotateTransform = function(animation, degrees, centerX, centerY) {
+        this.animation = animation;
+        this.radians = -(Math.PI / 180) * degrees;
+        this.centerX = centerX;
+        this.centerY = centerY;
+    };
+    RotateTransform.prototype.get = function(duration) {
+        var state = this.animation.get(duration);
+        var newState = {lines:[]};
+        for (var i=0; i<state.lines.length; i++){
+            var p1 = this.rotatePoint(state.lines[i][0],state.lines[i][1], duration);
+            var p2 = this.rotatePoint(state.lines[i][2],state.lines[i][3], duration);
+            newState.lines.push(p1.concat(p2));
+        }
+        return newState;
+    }
+    RotateTransform.prototype.rotatePoint = function(x, y, duration) {
+        var cx = this.centerX;
+        var cy = this.centerY;
+        var cos = Math.cos(this.radians);
+        var sin = Math.sin(this.radians);
+        var nx = (cos * (x - cx)) + (sin * (y - cy)) + cx;
+        var ny = (cos * (y - cy)) - (sin * (x - cx)) + cy;
+        return [nx, ny];
+    };
+    RotateTransform.prototype.done = doneFunc;
+    RotateTransform.prototype.duration = function() {
+        return this.animation.duration();
+    };
+
     return  {
       Line: LineAnim,
       Simul: SimulAnim,
@@ -193,5 +223,6 @@ Anim = (function() {
       Reverse: ReverseAnim,
       Final: FinalAnim,
       Speed: SpeedTransform,
+      Rotate: RotateTransform,
     }
 })()
