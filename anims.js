@@ -51,6 +51,36 @@ Anim = (function() {
     LineAnim.prototype.duration = function() {
         return this.totDuration;
     }
+    LineAnim.prototype.then = function(newLine, duration, remain){
+        return new MultiLineAnim(new ConsecAnim(
+            [
+                new LineAnim(this.start, this.end, this.totDuration, false),
+                new LineAnim(this.end, newLine, duration, remain)
+            ], null, remain))
+    }
+
+
+    // MultiLine is just a wrapper to be able to chain .then()
+    // It makes an assumption that this.animation is onl ever a consecAnim where the 2nd
+    // element is a LineAnim
+    var MultiLineAnim = function(consecAnim){
+        this.animation = consecAnim;
+        this.remain = consecAnim.remain
+    }
+    MultiLineAnim.prototype.done = doneFunc;
+    MultiLineAnim.prototype.duration = function() {
+        return this.animation.duration();
+    }
+    MultiLineAnim.prototype.get = function(duration) {
+        return this.animation.get(duration);
+    }
+    MultiLineAnim.prototype.then = function(newLine, duration, remain) {
+        return new MultiLineAnim(new ConsecAnim(
+            [
+                this.animation,
+                new LineAnim(this.animation.animations[1].end, newLine, duration, remain)
+            ], null, remain))
+    }
 
     var SimulAnim = function(animations, duration, remain) {
         this.animations = animations;
