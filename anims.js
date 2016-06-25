@@ -253,7 +253,7 @@ Anim = (function() {
         var state = this.animation.get(duration);
         var newState = {lines:[]};
         for (var i=0; i<state.lines.length; i++){
-            var l = state.lines[i]
+            var l = state.lines[i];
 
             newState.lines.push([
                 l[0]+this.dX,
@@ -269,6 +269,34 @@ Anim = (function() {
         return this.animation.duration();
     };
 
+    var ScaleTransform = function(animation, x, y, dX, dY) {
+        this.animation = animation;
+        this.x = x;
+        this.y = y;
+        this.dX = dX;
+        this.dY = dY;
+    }
+    ScaleTransform.prototype.get = function(duration) {
+        var state = this.animation.get(duration);
+        var newState = {lines:[]};
+        for (var i=0; i<state.lines.length; i++){
+            var l = state.lines[i];
+
+            newState.lines.push([
+                this.x+((l[0]-this.x)*this.dX),
+                this.y+((l[1]-this.y)*this.dY),
+                this.x+((l[2]-this.x)*this.dX),
+                this.y+((l[3]-this.y)*this.dY),
+            ]);
+        }
+        return newState;
+    }
+    ScaleTransform.prototype.done = doneFunc;
+    ScaleTransform.prototype.duration = function() {
+        return this.animation.duration();
+    };
+
+
     return  {
       Line: LineAnim,
       Simul: SimulAnim,
@@ -280,5 +308,6 @@ Anim = (function() {
       Speed: SpeedTransform,
       Rotate: RotateTransform,
       Translate: TranslateTransform,
+      Scale: ScaleTransform,
     }
 })()
