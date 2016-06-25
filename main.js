@@ -15,24 +15,6 @@
 
 
 my_interface = (function() {
-    var ready = function(fn) {
-
-        // Sanity check
-        if (typeof fn !== 'function') {
-            return;
-        }
-
-        // If document is already loaded, run method
-        if (document.readyState === 'complete') {
-            return fn();
-        }
-
-        // Otherwise, wait until document is loaded
-        // The document has finished loading and the document has been parsed but sub-resources such as images, stylesheets and frames are still loading.
-        // The state indicates that the DOMContentLoaded event has been fired.
-        document.addEventListener('DOMContentLoaded', fn, false);
-
-    };
 
     var leftXMid = 0.35;
     var leftXExpandFinal = [leftXMid, 0.4 - 0.15, leftXMid, 0.6 + 0.15];
@@ -193,7 +175,7 @@ my_interface = (function() {
 
 
     };
-    ready(main);
+    main();
 
     return {
         hello: function() {
