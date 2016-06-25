@@ -244,6 +244,31 @@ Anim = (function() {
         return this.animation.duration();
     };
 
+    var TranslateTransform = function(animation, dX, dY) {
+        this.animation = animation;
+        this.dX = dX;
+        this.dY = dY;
+    };
+    TranslateTransform.prototype.get = function(duration) {
+        var state = this.animation.get(duration);
+        var newState = {lines:[]};
+        for (var i=0; i<state.lines.length; i++){
+            var l = state.lines[i]
+
+            newState.lines.push([
+                l[0]+this.dX,
+                l[1]+this.dY,
+                l[2]+this.dX,
+                l[3]+this.dY,
+            ]);
+        }
+        return newState;
+    }
+    TranslateTransform.prototype.done = doneFunc;
+    TranslateTransform.prototype.duration = function() {
+        return this.animation.duration();
+    };
+
     return  {
       Line: LineAnim,
       Simul: SimulAnim,
@@ -254,5 +279,6 @@ Anim = (function() {
       Final: FinalAnim,
       Speed: SpeedTransform,
       Rotate: RotateTransform,
+      Translate: TranslateTransform,
     }
 })()
