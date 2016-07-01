@@ -16,21 +16,27 @@
 
 my_interface = (function() {
 
+    var leftMeet = 0.425;
     var leftXMid = 0.35;
     var leftXExpandFinal = [leftXMid, 0.4 - 0.15, leftXMid, 0.6 + 0.15];
+    var leftLarge = [0.325, 0.4 - 0.05, 0.325, 0.6 + 0.05]
+    var twoLineMeet = [leftMeet, 0.45, leftMeet, 0.55];
+    var rightXExpandFinal = [0.5 + 0.15, 0.4 - 0.15, 0.5 + 0.15, 0.6 + 0.15];
+    var rightXExpandFinal2 = [0.5 + 0.25, 0.4 - 0.15, 0.5 + 0.25, 0.6 + 0.15];
+    var rightXExpandFinal3 = [0.5 + 0.25, 0.475, 0.5 + 0.25, 0.525];
     var topHorBord = 0.05;
     var botHorBord = 0.95;
 
 
     var rightExpandLine = new Anim.Line(
-        [0.5, 0.4, 0.5, 0.6], [0.5 + 0.15, 0.4 - 0.15, 0.5 + 0.15, 0.6 + 0.15],
-        1000,
+        [0.5, 0.4, 0.5, 0.6], rightXExpandFinal,
+        20000,
         true
     );
     var centExpandAnim = new Anim.Simul(
         [new Anim.Line(
                 [0.5, 0.4, 0.5, 0.6], leftXExpandFinal,
-                1000,
+                20000,
                 true
             ),
             rightExpandLine
@@ -42,12 +48,12 @@ my_interface = (function() {
     var centExpandAnim2 = new Anim.Simul(
         [new Anim.Line(
                 [0.5, 0.4, 0.5, 0.6], [0.5 - 0.3, 0.4 - 0.3, 0.5 - 0.3, 0.6 + 0.3],
-                4000, //hraði vinstri lína
+                40000, //hraði vinstri lína
                 true
             ),
             new Anim.Line(
                 [0.5, 0.4, 0.5, 0.6], [0.5 + 0.3, 0.4 - 0.3, 0.5 + 0.3, 0.6 + 0.3],
-                4000, //hraði hægri lína
+                40000, //hraði hægri lína
                 true
             )
         ],
@@ -83,36 +89,61 @@ my_interface = (function() {
     )
     var outwards = new Anim.Consec([
         centExpandAnim,
-        centExpandAnim2,
-        covExpandAnim,
+//        centExpandAnim2,
+//        covExpandAnim,
     ], null, false)
 
     var smallSlideUp = new Anim.Line([leftXMid, botHorBord-0.1, leftXMid, botHorBord], [leftXMid, topHorBord, leftXMid, topHorBord+0.1], 5000, false);
-    var makeSmallSlideUpDown = new Anim.Consec([
-        new Anim.Line(leftXExpandFinal, [leftXMid, 0.45, leftXMid, 0.55], 5000, false),
-        new Anim.Line([leftXMid, 0.45, leftXMid, 0.55], [leftXMid, botHorBord-0.1, leftXMid, botHorBord], 2500, false),
-        new Anim.Repeat(new Anim.Consec([ smallSlideUp, new Anim.Reverse(smallSlideUp)]), 10)
+    var leftLine = new Anim.Consec([
+        new Anim.Line(leftXExpandFinal, [leftXMid, 0.45, leftXMid, 0.55], 20000, false).then(
+          [leftXMid, 0.45, leftXMid, 0.55], 5000, false).then(
+          twoLineMeet, 10000, false).then(
+          twoLineMeet, 10000, false).then(
+          leftLarge, 3000, false).then(
+          twoLineMeet, 3000, false).then(
+          leftLarge, 3000, false).then(
+          twoLineMeet, 3000, false).then(
+          leftLarge, 3000, false).then(
+          twoLineMeet, 3000, false).then(
+          leftLarge, 3000, false).then(
+          twoLineMeet, 3000, false).then(
+          leftLarge, 3000, false).then(
+          twoLineMeet, 3000, false)
+        // new Anim.Line([leftXMid, 0.45, leftXMid, 0.55], [leftXMid, botHorBord-0.1, leftXMid, botHorBord], 2500, false),
+        // new Anim.Repeat(new Anim.Consec([ smallSlideUp, new Anim.Reverse(smallSlideUp)]), 10)
         ], null, true)
 
+    var rightLine = new Anim.Consec([
+      new Anim.Line(rightXExpandFinal, rightXExpandFinal, 15000, false).then(
+        rightXExpandFinal2, 10000, false).then(
+        rightXExpandFinal2, 10000, false).then(
+        rightXExpandFinal3, 30000, true)
+    ], null, true)
 
     var slide = new Anim.Simul([
-            new Anim.Final(covExpandAnim, null, true),
-            new Anim.Final(rightExpandLine, null, true),
-            new Anim.Final(centExpandAnim2, null, true),
-            makeSmallSlideUpDown
+            // new Anim.Final(covExpandAnim, null, true),
+            // new Anim.Final(centExpandAnim2, null, true),
+            leftLine,
+            rightLine
         ], null, true)
 
+    var centerLine = new Anim.Line([0.5, 0.4, 0.5, 0.6], [0.5, 0.4, 0.5, 0.6], 45000, true).then(
+      [0.5, 0.45, 0.5, 0.55], 10000, false
+    ).then(
+      twoLineMeet, 10000, true
+    );
 
     var main = new Anim.Consec([
-        new Anim.Wait(5000),
+        new Anim.Wait(10000),
         outwards,
         slide,
     ], null, true)
 
     var root = new Anim.Simul(
-        [main, new Anim.Line([0.5, 0.4, 0.5, 0.6], [0.5, 0.4, 0.5, 0.6], 1000, true)]
+        [main, centerLine]
     )
-    root = new Anim.Speed(root, 1);
+    var speed = 10
+    root = new Anim.Speed(root, speed);
 
     var main = function() {
         console.log("running main"); //skrifar i console
@@ -125,7 +156,7 @@ my_interface = (function() {
         var lastState = {
             lines: []
         }
-        var skip = 5000;
+        var skip = 0 / speed;
         var startTime = new Date();
 
         function initialize() {
