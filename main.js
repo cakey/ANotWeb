@@ -42,13 +42,13 @@ my_interface = (function() {
 
     var rightExpandLine = new Anim.Line(
         [0.5, 0.4, 0.5, 0.6], [0.5 + 0.15, 0.4 - 0.15, 0.5 + 0.15, 0.6 + 0.15],
-        5000,
+        1000,
         true
     );
     var centExpandAnim = new Anim.Simul(
         [new Anim.Line(
                 [0.5, 0.4, 0.5, 0.6], leftXExpandFinal,
-                5000,
+                1000,
                 true
             ),
             rightExpandLine
@@ -56,6 +56,24 @@ my_interface = (function() {
         null,
         true
     )
+
+    var centExpandAnim2 = new Anim.Simul(
+        [new Anim.Line(
+                [0.5, 0.4, 0.5, 0.6], [0.5 - 0.3, 0.4 - 0.3, 0.5 - 0.3, 0.6 + 0.3],
+                4000, //hraði vinstri lína
+                true
+            ),
+            new Anim.Line(
+                [0.5, 0.4, 0.5, 0.6], [0.5 + 0.3, 0.4 - 0.3, 0.5 + 0.3, 0.6 + 0.3],
+                4000, //hraði hægri lína
+                true
+            )
+        ],
+
+        null,
+        true
+    )
+
     var covExpandAnim = new Anim.Simul(
         [new Anim.Line(
                 [leftXMid, topHorBord, leftXMid, topHorBord], [leftXMid - 0.03, topHorBord, leftXMid + 0.03, topHorBord],
@@ -83,19 +101,23 @@ my_interface = (function() {
     )
     var outwards = new Anim.Consec([
         centExpandAnim,
+        centExpandAnim2,
         covExpandAnim,
     ], null, false)
 
-    smallSlideUp = new Anim.Line([leftXMid, botHorBord-0.1, leftXMid, botHorBord], [leftXMid, topHorBord, leftXMid, topHorBord+0.1], 5000, false);
+    var smallSlideUp = new Anim.Line([leftXMid, botHorBord-0.1, leftXMid, botHorBord], [leftXMid, topHorBord, leftXMid, topHorBord+0.1], 5000, false);
+    var makeSmallSlideUpDown = new Anim.Consec([
+        new Anim.Line(leftXExpandFinal, [leftXMid, 0.45, leftXMid, 0.55], 5000, false),
+        new Anim.Line([leftXMid, 0.45, leftXMid, 0.55], [leftXMid, botHorBord-0.1, leftXMid, botHorBord], 2500, false),
+        new Anim.Repeat(new Anim.Consec([ smallSlideUp, new Anim.Reverse(smallSlideUp)]), 10)
+        ], null, true)
+
 
     var slide = new Anim.Simul([
             new Anim.Final(covExpandAnim, null, true),
             new Anim.Final(rightExpandLine, null, true),
-            new Anim.Consec([
-                new Anim.Line(leftXExpandFinal, [leftXMid, 0.45, leftXMid, 0.55], 5000, false),
-                new Anim.Line([leftXMid, 0.45, leftXMid, 0.55], [leftXMid, botHorBord-0.1, leftXMid, botHorBord], 2500, false),
-                new Anim.Repeat(new Anim.Consec([ smallSlideUp, new Anim.Reverse(smallSlideUp)]), 10)
-                ], null, true)
+            new Anim.Final(centExpandAnim2, null, true),
+            makeSmallSlideUpDown
         ], null, true)
 
 
@@ -163,7 +185,7 @@ my_interface = (function() {
             height = canvas.height;
 
 
-            context.fillStyle = "#444444";
+            context.fillStyle = "#444249";
             context.fillRect(0, 0, width, height);
 
             state.lines.forEach(function(line, i) {
@@ -171,8 +193,7 @@ my_interface = (function() {
                 context.moveTo(width * line[0], height * line[1]);
                 context.lineTo(width * line[2], height * line[3]);
                 context.strokeStyle = "#ffffff";
-                context.lineWidth = 4;
-                context.lineCap = "round";
+                context.lineWidth = 3;
                 context.stroke();
 
             });
